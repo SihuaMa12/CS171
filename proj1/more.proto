@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proj1;
+
+message Event {
+	int32 type = 1;
+	int32 ori = 2;
+	int32 dest = 3;
+	int32 clock = 4;
+	string mess = 5;
+}
+
+message Initi {
+	int32 type = 1;
+	int32 ori = 2;
+}
+
+message SerError {
+	int32 type = 1;
+	string error = 2;
+}
+	
