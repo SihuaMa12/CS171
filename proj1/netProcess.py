@@ -17,8 +17,8 @@ from struct import pack, unpack
 # In[12]:
 
 
-a = pack(">H",2)
-a
+# a = pack(">H",2)
+# a
 
 
 # In[ ]:
@@ -102,6 +102,7 @@ def safeRec(sock, n, serNo):
 
 def newMes(sock, address):
     # Expecting initial message from processes
+    global sers
     ini = more.Initi()
     le = safeRec(sock, 2)
     le = unpack(">H", le)[0]
