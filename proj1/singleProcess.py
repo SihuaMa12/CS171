@@ -92,7 +92,7 @@ def comTask(sock):
             continue
             
         print("Received event "+newone.mess + " from server " + str(newone.ori))
-        addToQ(newone.mess, newone.clock)
+        addToQ(newone.mess, newone.clock+1)
 
 
 # In[ ]:

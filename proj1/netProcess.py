@@ -77,7 +77,8 @@ def mereRec(sock, n):
     res = []
     while lef > 0:
         then = sock.recv(lef)
-            
+        if then == b'':
+            break
             
         lef -= len(then)
         res.append(then)
