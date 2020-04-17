@@ -29,7 +29,6 @@ addLock = threading.Lock()
 
 def byteHelp(mes):
     fir = mes.SerializeToString()
-    print(fir)
     a = pack(">H", len(fir))
     return a+fir
 
@@ -93,7 +92,7 @@ def comTask(sock):
             continue
             
         print("Received event "+newone.mess + " from server " + str(newone.ori))
-        addToQ(newone.me, newone.clock)
+        addToQ(newone.mess, newone.clock)
 
 
 # In[ ]:
@@ -119,7 +118,7 @@ def printClocks():
     global quela
     global x
     print("Clocks:", end = " ")
-    print(i[1] for i in quela)
+    print([i[0] for i in quela])
 
 
 # In[ ]:
@@ -176,8 +175,8 @@ def mainPrompt(sock):
 
 
 
-len = len(sys.argv)
-if len != 2:
+le = len(sys.argv)
+if le != 2:
     print("Usage: python3 singleProcess.py [process ID]")
     sys.exit()
     
@@ -186,6 +185,9 @@ try:
 except ValueError:
     print("Not an integer, invalid usage")
     sys.exit()
+
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 net_address = ('localhost', 10000)
 sock.connect(net_address)
@@ -197,7 +199,9 @@ ini.ori = x
 sock.sendall(byteHelp(ini))
 
 # Proceed to event phase
-mainPrompt()
+t = threading.Thread(target = comTask, args=(sock,))
+t.start()
+mainPrompt(sock)
 
 
 # In[9]:

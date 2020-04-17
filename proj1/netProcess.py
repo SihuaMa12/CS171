@@ -8,6 +8,7 @@ import socket
 import sys
 import time
 import threading
+import random
 import concurrent.futures
 import more_pb2 as more
 import struct 
@@ -71,6 +72,18 @@ def newSend(ne, mes):
 
 # In[16]:
 
+def mereRec(sock, n):
+    lef = n
+    res = []
+    while lef > 0:
+        then = sock.recv(lef)
+            
+            
+        lef -= len(then)
+        res.append(then)
+    
+    return b''.join(res)
+
 
 def safeRec(sock, n, serNo):
     lef = n
@@ -88,7 +101,7 @@ def safeRec(sock, n, serNo):
         
     if not closed:
         return b''.join(res)
-    
+
     
     del sers[serNo]
     sock.close()
@@ -104,9 +117,9 @@ def newMes(sock, address):
     # Expecting initial message from processes
     global sers
     ini = more.Initi()
-    le = safeRec(sock, 2)
+    le = mereRec(sock, 2)
     le = unpack(">H", le)[0]
-    res = safeRec(sock, le)
+    res = mereRec(sock, le)
     ini.ParseFromString(res)
     if ini.type == 2:
         sers[ini.ori] = [sock, threading.Lock()]
@@ -121,7 +134,7 @@ def newMes(sock, address):
         res = safeRec(sock, le, ini.ori)
         newone = more.Event()
         newone.ParseFromString(res)
-        if res.type != 1:
+        if newone.type != 1:
             print("Process sending wrong messages, ending connection")
             del sers[ini.ori]
             endSock(sock)
@@ -132,7 +145,7 @@ def newMes(sock, address):
             SerE(sock, "Server not opened")
             continue
         
-        ne = sers[ini.ori]
+        ne = sers[des]
             
         first = pack(">H", len(res))
 #         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -143,7 +156,8 @@ def newMes(sock, address):
 
 
 # In[ ]:
-
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 server_address = ('localhost', 10000)
 print('starting up on %s port %s' % server_address)
@@ -152,11 +166,11 @@ sock.bind(server_address)
 sock.listen()
 
 sers = {}
-serLock = {}
 
 while True:
     socks, address = sock.accept()
-    t = threading.Thread(target=newMes, args = [socks, address])
+    t = threading.Thread(target=newMes, args = (socks, address,))
+    t.start()
     
 sock.close()
 
