@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package proj2;
+
+message Event {
+    int32 type = 1;
+    int32 ori = 2;
+    int32 dest = 3;
+    int32 clock = 4;
+    string mess = 5;
+}
+
+message Initi {
+    int32 type = 1;
+    int32 ori = 2;
+}
+
+message SerError {
+    int32 type = 1;
+    string error = 2;
+}
+
+message Release {
+    int32 type = 2;
+    int32 ori = 3;
+}
+
+message Broadcase {
+    int32 type = 3;
+    int32 ori = 4;
+}
+
+message Request {
+    int32 type = 4;
+    int32 ori = 5;
+}
+
+message Transaction {
+    int32 type = 5;
+    int32 ori = 6;
+}
+
