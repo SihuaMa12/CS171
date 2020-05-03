@@ -30,7 +30,7 @@ message Release {
     int32 ori = 2;
 }
 
-message Broadcase {
+message Broadcast {
     int32 type = 1;
     int32 ori = 2;
     int32 dest = 3;
