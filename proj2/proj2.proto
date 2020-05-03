@@ -2,17 +2,22 @@ syntax = "proto3";
 
 package proj2;
 
-message Event {
-    int32 type = 1;
-    int32 ori = 2;
-    int32 dest = 3;
-    int32 clock = 4;
-    string mess = 5;
-}
-
 message Initi {
     int32 type = 1;
     int32 ori = 2;
+}
+
+message Request {
+    int32 type = 1;
+    int32 id = 2;
+    int32 ori = 3;
+    double clock = 4;
+}
+
+message Reply {
+    int32 type = 1;
+    int32 id = 2;
+    int32 dest = 3;
 }
 
 message SerError {
@@ -21,22 +26,13 @@ message SerError {
 }
 
 message Release {
-    int32 type = 2;
-    int32 ori = 3;
+    int32 type = 1;
+    int32 ori = 2;
 }
 
 message Broadcase {
-    int32 type = 3;
-    int32 ori = 4;
+    int32 type = 1;
+    int32 ori = 2;
+    int32 dest = 3;
+    int32 amt = 4;
 }
-
-message Request {
-    int32 type = 4;
-    int32 ori = 5;
-}
-
-message Transaction {
-    int32 type = 5;
-    int32 ori = 6;
-}
-
