@@ -122,7 +122,7 @@ def newMes(sock, address):
     else:
         print("Unexpected!")
         #SerE(sock, "Expected initial message, not receiving right")
-        #endSock(sock)
+        # endSock(sock)
 
     # Continue to event sending phase
     while True:
@@ -139,14 +139,14 @@ def newMes(sock, address):
                 if it != then.ori:
                     ne = sers[it]
                     first = pack(">H", len(res))
-                    hreading.Thread(target=newSend, args=[ne, first + res]).start()
+                    threading.Thread(target=newSend, args=[ne, first + res]).start()
 
         if newone.type == 2:         # Reply
             then = more.Reply()
             then.ParseFromString(res)
             ne = sers[then.dest]
             first = pack(">H", len(res))
-            hreading.Thread(target=newSend, args=[ne, first + res]).start()
+            threading.Thread(target=newSend, args=[ne, first + res]).start()
 
         if newone.type == 4:         # Release
             then = more.Release()
@@ -155,7 +155,7 @@ def newMes(sock, address):
                 if it != then.ori:
                     ne = sers[it]
                     first = pack(">H", len(res))
-                    hreading.Thread(target=newSend, args=[ne, first + res]).start()
+                    threading.Thread(target=newSend, args=[ne, first + res]).start()
 
         if newone.type == 5:         # Broadcast
             then = more.Broadcast()
@@ -164,9 +164,9 @@ def newMes(sock, address):
                 if it != then.ori:
                     ne = sers[it]
                     first = pack(">H", len(res))
-                    hreading.Thread(target=newSend, args=[ne, first + res]).start()
-                    
-        if newone.type not in (1,2,3,4,5):
+                    threading.Thread(target=newSend, args=[ne, first + res]).start()
+
+        if newone.type not in (1, 2, 3, 4, 5):
             print("Errorla!")
             sys.exit()
 

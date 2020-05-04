@@ -10,7 +10,7 @@ import time
 import threading
 import concurrent.futures
 import proj2_pb2 as proj2
-import struct 
+import struct
 from struct import pack, unpack
 
 
@@ -44,7 +44,7 @@ balanceLock = threading.Lock()
 def byteHelp(mes):
     fir = mes.SerializeToString()
     a = pack(">H", len(fir))
-    return a+fir
+    return a + fir
 
 
 # In[ ]:
@@ -64,7 +64,7 @@ def byteHelp(mes):
 #                 incrementLock.acquire()
 #                 it.count += 1
 #                 incrementLock.release()
-                
+
 #     return
 
 
@@ -78,18 +78,18 @@ def recvEvent(sock):
     global wakeUp
     while True:
         le = safeRec(sock, 2)
-        le = unpack(le)[0]
+        le = unpack(">H", le)[0]
         re = safeRec(sock, le)
         more = proj2.Request()
         more.ParseFromString(re)
         if more.type == 1:  # Request received
-            
+
             th = proj2.Request()
             th.ParseFromString(re)
             addClock(th.clock + 1)
             priorityAdd([more.ori, more.clock, 0])
             sendReply(sock, more.ori)
-            
+
         elif more.type == 2:  # Reply received
             th = proj2.Reply()
             th.ParseFromString(re)
@@ -100,14 +100,14 @@ def recvEvent(sock):
                     it[2] += 1
                     incrementLock.release()
                     if it[2] == 2 and it == quela[0] and it[0] == x:
-                        criticSeciton()
+                        # criticSeciton()
                         wakeUp.acquire()
                         wakeUp.notifyAll()
                         wakeUp.release()
 
             addClock(th.clock + 1)
 
-        elif more.type == 4:  # release received
+        elif proj2.type == 4:  # release received
             th = proj2.Release()
             th.ParseFromString(re)
 
@@ -118,7 +118,7 @@ def recvEvent(sock):
 
             addClock(th.clock + 1)
 
-        elif more.type == 5: # BroadCast received
+        elif moore.type == 5:  # BroadCast received
             th = proj2.Broadcast()
             th.ParseFromString(re)
             addBalance(th)
@@ -152,7 +152,7 @@ def addBalance(ite):
         balanceLock.acquire()
         balance += ite.amt
         balanceLock.release()
-        
+
     return
 
 
@@ -168,18 +168,17 @@ def safeRec(sock, n):
         if then == b'':
             closed = True
             break
-            
-            
+
         lef -= len(then)
         res.append(then)
-        
+
     if not closed:
         return b''.join(res)
-    
+
     print("netProcess closed connection")
-    
+
     sys.exit()
-    
+
     return False
 
 
@@ -207,15 +206,14 @@ def addBlock(it):
 
 # In[ ]:
 
-
 def printBlock():
     global blockQueue
-    print("(", end ='')
+    print("(", end='')
     for it in blockQueue:
-        print("[P" + str(it[0]) + ", P" + str(it[1]) + ", $" + str(it[2]) + "]", end = '')
+        print("[P" + str(it[0]) + ", P" + str(it[1]) + ", $" + str(it[2]) + "]", end='')
         if it != blockQueue[-1]:
-            print(", ", end = '')
-        
+            print(", ", end='')
+
     print(")")
 
 
@@ -232,25 +230,22 @@ def priorityAdd(ite):
                 addToQ(i, ite)
                 inserted = True
                 break
-                
+
         if ite[1] < quela[i][1]:
             addToQ(i, ite)
             inserted = True
             break
-            
+
     if not inserted:
         addToQ(len(quela), ite)
-        
 
 
 # In[9]:
 
 
-def comTask(sock):
-    
+# def comTask(sock):
 
-
-# In[ ]:
+    # In[ ]:
 
 
 def addClock(ano):
@@ -290,7 +285,7 @@ def drawBalance(amt):
     balanceLock.release()
     if balance < 0:
         print("Balance Error!")
-    
+
     return
 
 
@@ -301,7 +296,7 @@ def broadCastBlock(sock, dest, amt):
     global sendLock
     global x
     global clock
-    
+
     th = proj2.Broadcast()
     th.type = 5
     th.ori = x
@@ -328,7 +323,6 @@ def releaseBlock(sock):
     sendLock.acquire()
     sock.sendall(byteHelp(th))
     sendLock.release()
-    
     addClock(-1)
 
 
@@ -346,10 +340,8 @@ def trans(amt, des, sock):
     releaseBlock()
     print("Transaction completed!")
     wakeUp.release()
-    
-    
+
     return
-    
 
 
 # In[ ]:
@@ -371,7 +363,7 @@ def transferEvent(sock):
     if x1 > balance:
         print("Failed since balance not enough!")
         return
-    
+
     print("Please enter the server number you want to transfer balance to:")
     des = input()
     try:
@@ -379,15 +371,14 @@ def transferEvent(sock):
     except ValueError:
         print("Invalid type!")
         return
-    
-    if des not in (1,2,3):
+
+    if des not in (1, 2, 3):
         print("Invalid number!")
         return
-    
+
     trans(x1, des, sock)
-    
+
     return
-    
 
 
 # In[ ]:
@@ -414,7 +405,7 @@ def mainPrompt(sock):
         except ValueError:
             print("Wrong type, please enter again!")
             continue
-            
+
         if x1 == 1:
             transferEvent(sock)
         elif x1 == 2:
@@ -423,7 +414,6 @@ def mainPrompt(sock):
             printBlock()
         else:
             print("Invalid option!")
-            
 
 
 # In[ ]:
@@ -433,7 +423,7 @@ le = len(sys.argv)
 if le != 2:
     print("Usage: python3 singleProcess.py [process ID]")
     sys.exit()
-    
+
 try:
     x = int(sys.argv[1])
 except ValueError:
@@ -446,14 +436,13 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 net_address = ('localhost', 10000)
 sock.connect(net_address)
 
-ini = more.Initi()
+ini = proj2.Initi()
 ini.type = 0
 ini.ori = x
 
 sock.sendall(byteHelp(ini))
 
 # Proceed to event phase
-t = threading.Thread(target = recvEvent, args=(sock,))
+t = threading.Thread(target=recvEvent, args=(sock,))
 t.start()
 mainPrompt(sock)
-
