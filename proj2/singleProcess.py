@@ -87,14 +87,16 @@ def recvEvent(sock):
 
             th = proj2.Request()
             th.ParseFromString(re)
+            addClock(th.clock + 1)
             
             priorityAdd([more.ori, more.clock, 0])
             sendReply(sock, more.ori)
-            addClock(th.clock + 1)
+            
 
         elif more.type == 2:  # Reply received
             th = proj2.Reply()
             th.ParseFromString(re)
+            addClock(th.clock + 1)
 
             for it in quela:
                 if it[0] == x:
@@ -107,7 +109,7 @@ def recvEvent(sock):
                         wakeUp.notifyAll()
                         wakeUp.release()
 
-            addClock(th.clock + 1)
+            
 
         elif more.type == 4:  # release received
             th = proj2.Release()
@@ -119,8 +121,11 @@ def recvEvent(sock):
                 qLock.release()
                 
             addClock(th.clock + 1)
+            
+            if len(quela) == 0:
+                continue
                 
-            if quela[0][0] == x && quela[0][2] == 2:
+            if quela[0][0] == x and quela[0][2] == 2:
                 wakeUp.acquire()
                 wakeUp.notifyAll()
                 wakeUp.release()
