@@ -117,8 +117,15 @@ def recvEvent(sock):
                 qLock.acquire()
                 quela.pop(0)
                 qLock.release()
-
+                
             addClock(th.clock + 1)
+                
+            if quela[0][0] == x && quela[0][2] == 2:
+                wakeUp.acquire()
+                wakeUp.notifyAll()
+                wakeUp.release()
+
+            
 
         elif more.type == 5:  # BroadCast received
             th = proj2.Broadcast()
