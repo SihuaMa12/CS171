@@ -25,6 +25,7 @@ clockLock = threading.Lock()
 
 addLock = threading.Lock()
 popLock = threading.Lock()
+qLock = threading.Lock()
 blockQueue = []
 blockLock = threading.Lock()
 # localQueue = {}
@@ -74,7 +75,7 @@ def byteHelp(mes):
 def recvEvent(sock):
     global x
     global incrementLock
-    global popLock
+    global qLock
     global wakeUp
     while True:
         le = safeRec(sock, 2)
@@ -112,9 +113,9 @@ def recvEvent(sock):
             th.ParseFromString(re)
 
             if th.ori == quela[0][0]:
-                popLock.acquire()
+                qLock.acquire()
                 quela.pop(0)
-                popLock.release()
+                qLock.release()
 
             addClock(th.clock + 1)
 
@@ -187,10 +188,10 @@ def safeRec(sock, n):
 
 def addToQ(ind, it):
     global quela
-    global addLock
-    addLock.acquire()
+    global qLock
+    qLock.acquire()
     quela.insert(ind, it)
-    addLock.release()
+    qLock.release()
 
 
 # In[ ]:
@@ -332,12 +333,21 @@ def releaseBlock(sock):
 def trans(amt, des, sock):
     global wakeUp
     global x
+    global quela
+    global qLock
+    
     sendReq(sock)
     wakeUp.acquire()
     wakeUp.wait()
     drawBalance(amt)
     broadCastBlock(sock, des, amt)
-    releaseBlock()
+    releaseBlock(sock)
+    qLock.acquire()
+    quela.pop(0)
+    qLock.release()
+    blockLock.acquire()
+    blockQueue.append([x, des, amt])
+    blockLock.release()
     print("Transaction completed!")
     wakeUp.release()
 
