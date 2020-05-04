@@ -223,13 +223,13 @@ def addBlock(it):
 
 def printBlock():
     global blockQueue
-    print("(", end='')
+    print("[", end='')
     for it in blockQueue:
-        print("[P" + str(it[0]) + ", P" + str(it[1]) + ", $" + str(it[2]) + "]", end='')
+        print("(P" + str(it[0]) + ", P" + str(it[1]) + ", $" + str(it[2]) + ")", end='')
         if it != blockQueue[-1]:
             print(", ", end='')
 
-    print(")")
+    print("]")
 
 
 # In[ ]:
@@ -422,7 +422,7 @@ def mainPrompt(sock):
     while True:
         print("""Please specify the event you want:
             Press 1 to transfer
-            Pess 2 to print balance
+            Press 2 to print balance
             Press 3 to print blockchain""")
         x1 = input()
         try:
