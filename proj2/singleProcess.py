@@ -108,7 +108,7 @@ def recvEvent(sock):
 
             addClock(th.clock + 1)
 
-        elif proj2.type == 4:  # release received
+        elif more.type == 4:  # release received
             th = proj2.Release()
             th.ParseFromString(re)
 
@@ -119,7 +119,7 @@ def recvEvent(sock):
 
             addClock(th.clock + 1)
 
-        elif moore.type == 5:  # BroadCast received
+        elif more.type == 5:  # BroadCast received
             th = proj2.Broadcast()
             th.ParseFromString(re)
             addBalance(th)
@@ -335,7 +335,7 @@ def trans(amt, des, sock):
     global x
     global quela
     global qLock
-    
+
     sendReq(sock)
     wakeUp.acquire()
     wakeUp.wait()
