@@ -52,7 +52,7 @@ def endSock(sock):
 
 
 def delaySome():
-    time.sleep(random.uniform(1, 5))
+    time.sleep(1)
 
 
 # In[ ]:
@@ -117,11 +117,12 @@ def newMes(sock, address):
     le = unpack(">H", le)[0]
     res = mereRec(sock, le)
     ini.ParseFromString(res)
-    if ini.type == 2:
+    if ini.type == 0:
         sers[ini.ori] = [sock, threading.Lock()]
     else:
-        SerE(sock, "Expected initial message, not receiving right")
-        endSock(sock)
+        print("Unexpected!")
+        #SerE(sock, "Expected initial message, not receiving right")
+        #endSock(sock)
 
     # Continue to event sending phase
     while True:
@@ -164,6 +165,10 @@ def newMes(sock, address):
                     ne = sers[it]
                     first = pack(">H", len(res))
                     hreading.Thread(target=newSend, args=[ne, first + res]).start()
+                    
+        if newone.type not in (1,2,3,4,5):
+            print("Errorla!")
+            sys.exit()
 
     return False
 
