@@ -87,9 +87,10 @@ def recvEvent(sock):
 
             th = proj2.Request()
             th.ParseFromString(re)
-            addClock(th.clock + 1)
+            
             priorityAdd([more.ori, more.clock, 0])
             sendReply(sock, more.ori)
+            addClock(th.clock + 1)
 
         elif more.type == 2:  # Reply received
             th = proj2.Reply()
@@ -123,7 +124,7 @@ def recvEvent(sock):
             th = proj2.Broadcast()
             th.ParseFromString(re)
             addBalance(th)
-            addBlock(re)
+            addBlock(th)
             addClock(th.clock + 1)
 
 
@@ -133,7 +134,7 @@ def recvEvent(sock):
 def sendReply(sock, serNo):
     global clock
     global sendLock
-    addClock(-1)
+    
     th = proj2.Reply()
     th.type = 2
     th.clock = clock
@@ -141,6 +142,7 @@ def sendReply(sock, serNo):
     sendLock.acquire()
     sock.sendall(byteHelp(th))
     sendLock.release()
+    addClock(-1)
 
 
 # In[ ]:
@@ -264,7 +266,7 @@ def sendReq(sock):
     global x
     global clock
     global sendLock
-    addClock(-1)
+    
     newone = proj2.Request()
     newone.type = 1
     newone.ori = x
@@ -273,6 +275,7 @@ def sendReq(sock):
     sock.sendall(byteHelp(newone))
     priorityAdd([x, clock, 0])
     sendLock.release()
+    addClock(-1)
 
 
 # In[ ]:
