@@ -1,0 +1,50 @@
+syntax="proto3";
+
+message BallotNum {
+   int32 num = 1;
+   int32 pid = 2;
+   int32 depth = 3;
+}
+
+message Prepare {
+   int32 type = 1;
+   BallotNum ballot = 2;
+}
+
+message Transaction {
+   int32 src = 1;
+   int32 rcvr = 2;
+   int32 amt = 3;
+}
+
+message Block {
+   int32 type = 1;
+   repeated Transaction trans = 2;
+   string nonce = 3;
+   string hash = 4;  
+}
+
+message Promise {
+   int32 type = 1;
+   BallotNum ballot = 2;
+   BallotNum acceptNum = 3;
+   Block acceptVal = 4;
+}
+   
+message Accept {
+   int32 type = 1;
+   BallotNum ballot = 2;
+   Block myVal = 3;
+}
+ 
+message Accepted {
+   int32 type = 1;
+   BallotNum ballot = 2;
+   Block acceptVal = 3;
+}
+
+message Decide {
+   int32 type = 1;
+   BallotNum ballot = 2;
+   Block val = 3;
+}  
