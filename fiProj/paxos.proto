@@ -6,6 +6,7 @@ message BallotNum {
    int32 depth = 3;
 }
 
+//Type: 1
 message Prepare {
    int32 type = 1;
    BallotNum ballot = 2;
@@ -17,6 +18,7 @@ message Transaction {
    int32 amt = 3;
 }
 
+//Type: 2
 message Block {
    int32 type = 1;
    repeated Transaction trans = 2;
@@ -24,25 +26,30 @@ message Block {
    string hash = 4;  
 }
 
+//Type: 3
 message Promise {
    int32 type = 1;
    BallotNum ballot = 2;
    BallotNum acceptNum = 3;
    Block acceptVal = 4;
 }
-   
+
+
+//Type: 4
 message Accept {
    int32 type = 1;
    BallotNum ballot = 2;
    Block myVal = 3;
 }
- 
+
+//Type: 5
 message Accepted {
    int32 type = 1;
    BallotNum ballot = 2;
    Block acceptVal = 3;
 }
 
+//Type: 6
 message Decide {
    int32 type = 1;
    BallotNum ballot = 2;
