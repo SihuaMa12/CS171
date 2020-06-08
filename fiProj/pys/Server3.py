@@ -235,7 +235,7 @@ def addToBlockChain(mes):
     states.blockChain.insert(mes.depth, mes.Block)
 
 
-# In[18]:
+# In[1]:
 
 
 def recvAndSet(sock, i):
@@ -247,6 +247,7 @@ def recvAndSet(sock, i):
     global promiseSlot, promiseCond
     global myBlock, tempBlock
     global leader
+    global balance
     global decideCond
     while True:
         le = safeRec(sock, 2)
@@ -326,10 +327,13 @@ def recvAndSet(sock, i):
             newone.ParseFromString(mes)
             if newone.val not in states.blockChain:
                 states.blockChain.append(newone.val)
+                if newone.val.trans.rcvr == procNo:
+                    balance += newone.val.trans.amt
                 
             ballot.depth = len(states.blockChain)
             clearQueue(i)
             leader = True
+            tempBlock = paxos_pb2.Block()
             decideCond.acquire()
             decideCond.notifyAll()
             decideCond.release()
@@ -885,6 +889,7 @@ def oneRound():
     global tempBlock
     global started
     global leader
+    global balance
     global decideCond
     started = True
     
@@ -900,6 +905,7 @@ def oneRound():
                     sendDecide()
                     if myBlock not in states.blockChain:
                         states.blockChain.append(myBlock)
+                        balance -= myBlock.amt
                         
                     acceptVal = paxos_pb2.Block()
                     acceptNum = paxos_pb2.BallotNum()
