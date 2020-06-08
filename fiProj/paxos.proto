@@ -19,9 +19,9 @@ message Transaction {
 }
 
 message Block {
-   repeated Transaction trans = 2;
+   repeated Transaction trans = 2;	
    string nonce = 3;
-   string hash = 4;  
+   string hash = 4; 
 }
 
 //Type: 3
@@ -50,6 +50,7 @@ message Accepted {
 //Type: 6
 message Decide {
    int32 type = 1;
+   int32 src = 4;
    BallotNum ballot = 2;
    Block val = 3;
 }  
