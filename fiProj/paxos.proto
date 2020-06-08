@@ -18,9 +18,7 @@ message Transaction {
    int32 amt = 3;
 }
 
-//Type: 2
 message Block {
-   int32 type = 1;
    repeated Transaction trans = 2;
    string nonce = 3;
    string hash = 4;  
@@ -55,3 +53,16 @@ message Decide {
    BallotNum ballot = 2;
    Block val = 3;
 }  
+
+//Type: 7
+message Recover {
+   int32 type = 1;
+   repeated int32 depth = 2;
+}
+
+//Type: 8
+message RepRecover {
+   int32 type = 1;
+   int32 depth = 2;
+   int32 block = 3;
+}
