@@ -6,6 +6,10 @@ message BallotNum {
    int32 depth = 3;
 }
 
+message Init {
+   int32 src = 1;
+}
+
 //Type: 1
 message Prepare {
    int32 type = 1;
@@ -19,7 +23,7 @@ message Transaction {
 }
 
 message Block {
-   repeated Transaction trans = 2;	
+   repeated Transaction trans = 2;
    string nonce = 3;
    string hash = 4; 
 }

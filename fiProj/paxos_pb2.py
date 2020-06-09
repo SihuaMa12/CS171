@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0bpaxos.proto\"4\n\tBallotNum\x12\x0b\n\x03num\x18\x01 \x01(\x05\x12\x0b\n\x03pid\x18\x02 \x01(\x05\x12\r\n\x05\x64\x65pth\x18\x03 \x01(\x05\"3\n\x07Prepare\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\"5\n\x0bTransaction\x12\x0b\n\x03src\x18\x01 \x01(\x05\x12\x0c\n\x04rcvr\x18\x02 \x01(\x05\x12\x0b\n\x03\x61mt\x18\x03 \x01(\x05\"A\n\x05\x42lock\x12\x1b\n\x05trans\x18\x02 \x03(\x0b\x32\x0c.Transaction\x12\r\n\x05nonce\x18\x03 \x01(\t\x12\x0c\n\x04hash\x18\x04 \x01(\t\"m\n\x07Promise\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x1d\n\tacceptNum\x18\x03 \x01(\x0b\x32\n.BallotNum\x12\x19\n\tacceptVal\x18\x04 \x01(\x0b\x32\x06.Block\"I\n\x06\x41\x63\x63\x65pt\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x15\n\x05myVal\x18\x03 \x01(\x0b\x32\x06.Block\"O\n\x08\x41\x63\x63\x65pted\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x19\n\tacceptVal\x18\x03 \x01(\x0b\x32\x06.Block\"T\n\x06\x44\x65\x63ide\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x0b\n\x03src\x18\x04 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x13\n\x03val\x18\x03 \x01(\x0b\x32\x06.Block\"&\n\x07Recover\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\r\n\x05\x64\x65pth\x18\x02 \x03(\x05\"8\n\nRepRecover\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\r\n\x05\x64\x65pth\x18\x02 \x01(\x05\x12\r\n\x05\x62lock\x18\x03 \x01(\x05\x62\x06proto3'
+  serialized_pb=b'\n\x0bpaxos.proto\"4\n\tBallotNum\x12\x0b\n\x03num\x18\x01 \x01(\x05\x12\x0b\n\x03pid\x18\x02 \x01(\x05\x12\r\n\x05\x64\x65pth\x18\x03 \x01(\x05\"\x13\n\x04Init\x12\x0b\n\x03src\x18\x01 \x01(\x05\"3\n\x07Prepare\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\"5\n\x0bTransaction\x12\x0b\n\x03src\x18\x01 \x01(\x05\x12\x0c\n\x04rcvr\x18\x02 \x01(\x05\x12\x0b\n\x03\x61mt\x18\x03 \x01(\x05\"A\n\x05\x42lock\x12\x1b\n\x05trans\x18\x02 \x03(\x0b\x32\x0c.Transaction\x12\r\n\x05nonce\x18\x03 \x01(\t\x12\x0c\n\x04hash\x18\x04 \x01(\t\"m\n\x07Promise\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x1d\n\tacceptNum\x18\x03 \x01(\x0b\x32\n.BallotNum\x12\x19\n\tacceptVal\x18\x04 \x01(\x0b\x32\x06.Block\"I\n\x06\x41\x63\x63\x65pt\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x15\n\x05myVal\x18\x03 \x01(\x0b\x32\x06.Block\"O\n\x08\x41\x63\x63\x65pted\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x19\n\tacceptVal\x18\x03 \x01(\x0b\x32\x06.Block\"T\n\x06\x44\x65\x63ide\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x0b\n\x03src\x18\x04 \x01(\x05\x12\x1a\n\x06\x62\x61llot\x18\x02 \x01(\x0b\x32\n.BallotNum\x12\x13\n\x03val\x18\x03 \x01(\x0b\x32\x06.Block\"&\n\x07Recover\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\r\n\x05\x64\x65pth\x18\x02 \x03(\x05\"8\n\nRepRecover\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\r\n\x05\x64\x65pth\x18\x02 \x01(\x05\x12\r\n\x05\x62lock\x18\x03 \x01(\x05\x62\x06proto3'
 )
 
 
@@ -69,6 +69,37 @@ _BALLOTNUM = _descriptor.Descriptor(
 )
 
 
+_INIT = _descriptor.Descriptor(
+  name='Init',
+  full_name='Init',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='src', full_name='Init.src', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=69,
+  serialized_end=88,
+)
+
+
 _PREPARE = _descriptor.Descriptor(
   name='Prepare',
   full_name='Prepare',
@@ -102,8 +133,8 @@ _PREPARE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=69,
-  serialized_end=120,
+  serialized_start=90,
+  serialized_end=141,
 )
 
 
@@ -147,8 +178,8 @@ _TRANSACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=122,
-  serialized_end=175,
+  serialized_start=143,
+  serialized_end=196,
 )
 
 
@@ -192,8 +223,8 @@ _BLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=177,
-  serialized_end=242,
+  serialized_start=198,
+  serialized_end=263,
 )
 
 
@@ -244,8 +275,8 @@ _PROMISE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=244,
-  serialized_end=353,
+  serialized_start=265,
+  serialized_end=374,
 )
 
 
@@ -289,8 +320,8 @@ _ACCEPT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=355,
-  serialized_end=428,
+  serialized_start=376,
+  serialized_end=449,
 )
 
 
@@ -334,8 +365,8 @@ _ACCEPTED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=430,
-  serialized_end=509,
+  serialized_start=451,
+  serialized_end=530,
 )
 
 
@@ -386,8 +417,8 @@ _DECIDE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=511,
-  serialized_end=595,
+  serialized_start=532,
+  serialized_end=616,
 )
 
 
@@ -424,8 +455,8 @@ _RECOVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=597,
-  serialized_end=635,
+  serialized_start=618,
+  serialized_end=656,
 )
 
 
@@ -469,8 +500,8 @@ _REPRECOVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=637,
-  serialized_end=693,
+  serialized_start=658,
+  serialized_end=714,
 )
 
 _PREPARE.fields_by_name['ballot'].message_type = _BALLOTNUM
@@ -485,6 +516,7 @@ _ACCEPTED.fields_by_name['acceptVal'].message_type = _BLOCK
 _DECIDE.fields_by_name['ballot'].message_type = _BALLOTNUM
 _DECIDE.fields_by_name['val'].message_type = _BLOCK
 DESCRIPTOR.message_types_by_name['BallotNum'] = _BALLOTNUM
+DESCRIPTOR.message_types_by_name['Init'] = _INIT
 DESCRIPTOR.message_types_by_name['Prepare'] = _PREPARE
 DESCRIPTOR.message_types_by_name['Transaction'] = _TRANSACTION
 DESCRIPTOR.message_types_by_name['Block'] = _BLOCK
@@ -502,6 +534,13 @@ BallotNum = _reflection.GeneratedProtocolMessageType('BallotNum', (_message.Mess
   # @@protoc_insertion_point(class_scope:BallotNum)
   })
 _sym_db.RegisterMessage(BallotNum)
+
+Init = _reflection.GeneratedProtocolMessageType('Init', (_message.Message,), {
+  'DESCRIPTOR' : _INIT,
+  '__module__' : 'paxos_pb2'
+  # @@protoc_insertion_point(class_scope:Init)
+  })
+_sym_db.RegisterMessage(Init)
 
 Prepare = _reflection.GeneratedProtocolMessageType('Prepare', (_message.Message,), {
   'DESCRIPTOR' : _PREPARE,
