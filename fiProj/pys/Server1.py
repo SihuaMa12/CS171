@@ -83,7 +83,7 @@ if path.isfile("State_" + str(procNo)):
 
 
 # print("This is stub")
-# procNo = 1
+
 # tes = hashlib.sha256("nihao".encode("utf-8")).hexdigest()
 # print(findNonce(tes))
 ports = {1: 10001, 2:10002, 3:10003, 4:10004, 5:10005}
@@ -248,7 +248,6 @@ def recvAndSet(sock, i):
     global promiseSlot, promiseCond
     global myBlock, tempBlock
     global leader
-    global balance
     global decideCond
     while True:
         le = safeRec(sock, 2)
@@ -329,7 +328,7 @@ def recvAndSet(sock, i):
             if newone.val not in states.blockChain:
                 states.blockChain.append(newone.val)
                 if newone.val.trans.rcvr == procNo:
-                    balance += newone.val.trans.amt
+                    states.balance += newone.val.trans.amt
 
             ballot.depth = len(states.blockChain)
             clearQueue(i)
@@ -890,7 +889,6 @@ def oneRound():
     global tempBlock
     global started
     global leader
-    global balance
     global decideCond
     started = True
 
@@ -906,7 +904,7 @@ def oneRound():
                     sendDecide()
                     if myBlock not in states.blockChain:
                         states.blockChain.append(myBlock)
-                        balance -= myBlock.amt
+                        states.balance -= myBlock.amt
 
                     acceptVal = paxos_pb2.Block()
                     acceptNum = paxos_pb2.BallotNum()
@@ -969,7 +967,7 @@ def moneyTransfer():
     if y < 0:
         print("Amount cannot be negative")
         return False
-    elif y > balance:
+    elif y > states.balance:
         print("Balance not enough")
         return False
 
