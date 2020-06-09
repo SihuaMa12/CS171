@@ -17,7 +17,7 @@ import sys
 from os import path
 from struct import pack, unpack
 
-# I decide to divide sending and receiving into two threads, and with receving wake up the sending thread when 
+# I decide to divide sending and receiving into two threads, and with receving wake up the sending thread when
 # received proper message
 
 
@@ -71,6 +71,7 @@ class State:
 
 # In[4]:
 
+procNo = 5
 
 states = State()
 if path.isfile("State_" + str(procNo)):
@@ -82,7 +83,7 @@ if path.isfile("State_" + str(procNo)):
 
 
 # print("This is stub")
-procNo = 5
+
 # tes = hashlib.sha256("nihao".encode("utf-8")).hexdigest()
 # print(findNonce(tes))
 ports = {1: 10001, 2:10002, 3:10003, 4:10004, 5:10005}
@@ -119,7 +120,7 @@ for i in range(5):
     recvConds[i + 1] = threading.Condition()
     recvThreads[i + 1] = 0
     mesSlot[i + 1] = 0
-    
+
 linkSuc = [False] * 5
 activeFailed = [False] * 5
 
@@ -194,8 +195,8 @@ def lisAndAcc(sock):
                 socks[ite] = soc
                 linkSuc[ite - 1] = True
                 threading.Thread(target = recvAndSet, args = (soc, ite, ))
-                
-                
+
+
 
 
 # In[7]:
@@ -207,7 +208,7 @@ def getLocalQCount():
     for ite in states.queue:
         if ite[0] == procNo:
             count += 1
-            
+
     return count
 
 
@@ -222,17 +223,17 @@ def waitSend(sock, mes):
 # In[ ]:
 
 
-def sendForRecovery(start, finish):
-    for i in range(start, finish):
-        
+# def sendForRecovery(start, finish):
+#     for i in range(start, finish):
+
 
 
 # In[3]:
 
 
-def addToBlockChain(mes):
-    global states
-    states.blockChain.insert(mes.depth, mes.Block)
+# def addToBlockChain(mes):
+#     global states
+#     states.blockChain.insert(mes.depth, mes.Block)
 
 
 # In[1]:
@@ -261,18 +262,18 @@ def recvAndSet(sock, i):
                 ballot.num = newone.ballot.num
                 leader = False
                 if newone.ballot.depth > ballot.depth:
-                    
+
                     sendForRecovery(ballot.depth, newone.ballot.depth)
                     ballot.depth = newone.ballot.depth
-                
+
                 returned = paxos_pb2.Promise()
                 returned.type = 3
                 returned.ballot.CopyFrom(newone.ballot)
                 returned.acceptNum.CopyFrom(acceptNum)
                 returned.acceptVal.CopyFrom(acceptVal)
                 threading.Thread(target = waitSend, args = (sock, returned,)).start()
-            
-            
+
+
         elif newone.type == 3:
             if len(promiseSlot) <= 2:
                 newone = paxos_pb2.Promise()
@@ -283,10 +284,10 @@ def recvAndSet(sock, i):
                     promiseCond.notifyAll()
                     promiseCond.clear()
                     promiseCond.release()
-                    
+
                     # promiseSlot to be cleared
-            
-            
+
+
         elif newone.type == 4:
             newone = paxos_pb2.Accept()
             newone.ParseFromString(mes)
@@ -300,11 +301,11 @@ def recvAndSet(sock, i):
                 acceptVal = newone.myVal
                 then.ballot.CopyFrom(newone.ballot)
                 then.acceptVal.CopyFrom(newone.myVal)
-                
+
                 threading.Thread(target = waitSend, args = (sock, then, )).start()
-                
+
             continue
-                
+
         elif newone.type == 5:
             if len(acceptSlot) < 2:
 
@@ -312,16 +313,16 @@ def recvAndSet(sock, i):
                 newone.ParseFromString(mes)
                 if newone.ballot == acceptBallot:
                     acceptSlot.append(newone)
-            
+
             elif len(acceptSlot) == 2:
                 acceptCond.acquire()
                 acceptCond.notifyAll()
                 acceptSlot.clear()
                 acceptCond.release()
-                
+
             # acceptSlot to be cleared
-                
-        
+
+
         elif newone.type == 6:
             newone = paxos_pb2.Decide()
             newone.ParseFromString(mes)
@@ -329,7 +330,7 @@ def recvAndSet(sock, i):
                 states.blockChain.append(newone.val)
                 if newone.val.trans.rcvr == procNo:
                     balance += newone.val.trans.amt
-                
+
             ballot.depth = len(states.blockChain)
             clearQueue(i)
             leader = True
@@ -337,8 +338,8 @@ def recvAndSet(sock, i):
             decideCond.acquire()
             decideCond.notifyAll()
             decideCond.release()
-            
-            
+
+
         elif newone.type == 7:
             newone = paxos_pb2.Recover()
             newone.ParseFromString(mes)
@@ -348,14 +349,14 @@ def recvAndSet(sock, i):
                 then.depth = newone.depth
                 then.block.CopyFrom(states.blockChain[depth])
                 waitSend(sock, then)
-            
-            
+
+
         elif newone.type == 8:
             newone = paxos_pb2.RepRecover()
             newone.ParseFromString(mes)
             addToBlockChain(newone)
             continue
-            
+
 
 
 # In[60]:
@@ -363,11 +364,11 @@ def recvAndSet(sock, i):
 
 def clearQueue(src):
     global states
-    
+
     for ite in states.queue:
         if ite[0] == src:
             states.queue.remove(ite)
-            
+
 
 
 # In[ ]:
@@ -380,7 +381,7 @@ def failLink():
     if x not in [1,2,3,4,5] or x == procNo:
         print("Invalid pid")
         return
-    
+
     linkSuc[x - 1] = False
 
 
@@ -394,7 +395,7 @@ def fixLink():
     if x not in [1,2,3,4,5]:
         print("Invalid pid")
         return
-    
+
     linkSuc[x-1] = True
 
 
@@ -409,7 +410,7 @@ def getInt():
         except ValueError:
             print("Not an integer")
             continue
-        
+
         return x
 
 
@@ -430,7 +431,7 @@ def failProcess():
     global procNo, states
     with open("State_" + str(procNo), "wb") as f:
         pickle.dump(states, f)
-        
+
     print("Failing")
     sys.exit()
 
@@ -462,7 +463,7 @@ def printQueue():
 # In[ ]:
 
 
-def comOther()
+# def comOther()
 
 
 # In[ ]:
@@ -536,7 +537,7 @@ def transStr(trans):
     st = b''
     for ite in trans:
         st = st + ite.SerializeToString()
-        
+
     return st
 
 
@@ -544,7 +545,7 @@ def transStr(trans):
 
 
 def setNonce(block):
-    
+
     while True:
         block.nonce = randStr()
         res = hashlib.sha256(block.SerializeToString()).hexdigest()
@@ -582,7 +583,7 @@ def timedRec(sock, n, ti):
     mes = []
     count = n
     now = time.time()
-    
+
     try:
 
         while count > 0:
@@ -593,12 +594,12 @@ def timedRec(sock, n, ti):
 
             if time.time() - now > ti:
                 return False
-            
+
     except:
         print("Connection closed")
-        
+
         return False
-        
+
     return b''.join(mes)
 
 
@@ -613,7 +614,7 @@ def safeRec(sock, n):
         mes.append(mes)
         le = len(a)
         count -= le
-        
+
     return b''.join(mes)
 
 
@@ -637,8 +638,8 @@ def sendDecide():
     for ite in socks:
         if linkSuc[ite - 1] == True:
             threading.Thread(target = waitSend, args = (socks[ite], de,)).start()
-            
-    
+
+
 
 
 # In[ ]:
@@ -650,7 +651,7 @@ def sendPrepare(sock, sno):
     pMes.type = 1
     pMes.ballot.depth = len(states.blockChain)
     pMes.ballot.pid = procNo
-    
+
     waitSend(sock, pMes)
 
 
@@ -664,16 +665,16 @@ def getPromise(sock, sno):
         return False
     le = unpack(">H", res)[0]
     res = safeRec(sock, le)
-    
-    
-    
+
+
+
     PCLock.acquire()
     promiseCount += 1
     PCLock.release()
-    
+
     if len(responded) < 3:
         reponded.append(sno)
-    
+
     return True
 
 
@@ -690,29 +691,29 @@ def askForPromise(i):
         sock.bind(server_address)
         try:
             sock.connect(server_address)
-        except socket.error, msg:
+        except Exception:
             print("Connection failed for server " + str(i))
             return
-        
+
         socks[i] = sock
         linkSuc[i-1] = True
         threading.Thread(target = recvAndSet, args = (sock, i, ))
-        
+
     sendPrepare(socks[i], i)
-    
-    
-    
-    
+
+
+
+
 #     getPromise(socks[i], i)
-    
+
 #     t = threading.Thread(target = sendPrepare, args = (socks[i], i, ))
 #     t.start()
 #     t.join()
-    
-    
-    
-    
-    
+
+
+
+
+
 
 
 # In[ ]:
@@ -729,7 +730,7 @@ def maxOf(li):
             elif ite[1].acceptNum.num == fir.acceptNum.num:
                 if ite[1].acceptNum.pid > fir.acceptNum.pid:
                     fir = ite[1]
-                    
+
     return fir
 
 
@@ -743,8 +744,8 @@ def ElectAsLeader():
     global promiseSlot
     global states
     responded.append(procNo)
-    
-    
+
+
     quq = []
     ballot.num += 1
     ballot.pid = procNo
@@ -756,29 +757,29 @@ def ElectAsLeader():
             quq.append(t)
     for ite in quq:
         ite.join()
-        
-        
+
+
     promiseCond.acquire()
     res = promiseCond.wait(6)
     promiseCond.release()
-    
-    
+
+
 #     if promiseCount < 3:
     if res == False:
         print("Getting promise failed, not enough servers")
         return False
-    
-    
+
+
     tempBlock = maxof(promiseSlot)
-    
-    
-    
-    
+
+
+
+
 #     promiseCount = 1
-    
-    
-    
-        
+
+
+
+
 
 
 # In[ ]:
@@ -793,7 +794,7 @@ def sendAccept(sock, i):
     newone = paxos_pb2.Accept()
     newone.type = 4
     newone.ballot.CopyFrom(ballot)
-    
+
     if tempBlock != paxos_pb2.Block():
 
 
@@ -808,67 +809,67 @@ def sendAccept(sock, i):
             newone.myVal.hash = hashlib.sha256('').hexdigest()
         else:
             newone.myVal.hash = hashlib.sha256(states.blockChain[-1].SerializeToString()).hexdigest()
-            
+
         setNonce(newone.myVal)
         clearQueue(procNo)
         myBlock.CopyFrom(newone.myVal)
-        
+
     else:
         newone.myVal.CopyFrom(tempBlock)
-        
-        
-    
+
+
+
 #         states.blockChain[-1].hash
-        
-    
-    
+
+
+
     acceptBallot.CopyFrom(newone.ballot)
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     waitSend(sock, newone)
 #     time.sleep(5)
-    
+
 #     helpSend(sock, newone)
-    
-    
-    
+
+
+
 
 
 # In[ ]:
 
 
 def transPrepare():
-    global procNo， responded, states, socks
+    global procNo, responded, states, socks
     global linkSuc
     global acceptCond
 #     toSent = paxos_pb2.Block()
 #     toSent.trans.extend(states.queue)
-    
+
 #     if len(states.blockChain) == 0:
 #         toSent.hash = ""
 #     else:
-#         toSent.hash = 
-    
+#         toSent.hash =
+
     for ite in socks:
         if ite != procNo and linkSuc[ite - 1] == True:
             t = threading.Thread(target = sendAccept, args = (socks[ite], ite, ))
             t.start()
             t.join()
-            
-            
+
+
     acceptCond.acquire()
     res = acceptCond.wait(6)
     acceptCond.release()
-    
+
     return res
-        
-    
-    
-    
+
+
+
+
 
 
 # In[70]:
@@ -892,34 +893,34 @@ def oneRound():
     global balance
     global decideCond
     started = True
-    
-    
+
+
     while True:
         time.sleep(randomVal())
         res = ElectAsLeader()
         if res == True and leader == True:
             res = transPrepare()
             if res == True and leader == True:
-                
+
                 if tempBlock == paxos_pb2.Block():
                     sendDecide()
                     if myBlock not in states.blockChain:
                         states.blockChain.append(myBlock)
                         balance -= myBlock.amt
-                        
+
                     acceptVal = paxos_pb2.Block()
                     acceptNum = paxos_pb2.BallotNum()
                     myBlock = paxos_pb2.Block()
                     started = False
                     return True
                 else:
-                    
+
                     acceptVal = paxos_pb2.Block()
                     acceptNum = paxos_pb2.BallotNum()
                     tempBlock = paxos_pb2.Block()
-                
-                
-                
+
+
+
             else:
                 # Wait on decision to be made
                 print("Waiting on decision")
@@ -934,21 +935,21 @@ def oneRound():
             decideCond.wait()
             decideCond.release()
 #             print("Failed to become leader")
-    
-    
-    
-    
+
+
+
+
 #     nwBlo = paxos_pb2.Block()
 #     trans = []
 #     for ite in states.queue:
-        
+
 #         if ite[0] == procNo
-            
+
 #             trans.append(ite[1])
-            
+
 #     nwBlo.trans.extend(trans)
-    
-    
+
+
 #     return True
 
 
@@ -962,7 +963,7 @@ def moneyTransfer():
     if x not in [1,2,3,4,5] or x == procNo:
         print("Not a valid pid")
         return False
-    
+
     print("Please specify the amount to transfer:")
     y = getInt()
     if y < 0:
@@ -971,17 +972,17 @@ def moneyTransfer():
     elif y > balance:
         print("Balance not enough")
         return False
-    
+
     newTrans = paxos_pb2.Transaction()
     newTrans.src = procNo
     newTrans.rcvr = x
     newTrans.amt = y
-    
-    
+
+
     states.queue.append((procNo, newTrans))
     if not started:
         threading.Thread(target = oneRound).start()
-    
+
 
 
 # In[10]:
@@ -1007,7 +1008,7 @@ while True:
     if x not in [1,2,3,4,5,6,7]:
         print("Not an valid option!")
         continue
-        
+
     if x == 1:
         moneyTransfer()
     elif x == 2:
