@@ -936,6 +936,7 @@ def oneRound():
 
 
                     myBlock = paxos_pb2.Block()
+                    ballot.depth = len(states.blockChain)
                 else:
                     print("Waiting for decision 0")
                     print("Tempblock: ", tempBlock)
